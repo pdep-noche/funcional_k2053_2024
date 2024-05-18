@@ -33,4 +33,21 @@ nuevoPeso :: Double -> Double
 nuevoPeso peso | peso > 2 = peso * 0.90
                | otherwise = peso * 0.95
 
+hierbaMagica :: Animal -> Animal
+hierbaMagica raton =  modificarEnfermedades(const []).modificarEdad (0*) $ raton
 
+
+medicamento :: [(Animal -> Animal)] -> Animal -> Animal
+medicamento hierbas raton = foldl (flip ($))  raton   hierbas
+
+medicamento' :: [(Animal -> Animal)] -> Animal -> Animal
+medicamento' hierbas raton = foldl (\unRaton unaHierba -> unaHierba unRaton) raton hierbas
+
+{-
+ghci> medicamento [hierbaBuena, hierbaVerde "tuberculosis", alcachofa] cerebro
+Raton {nombre = "Cerebro", edad = 3.0, peso = 0.19, enfermedades = ["brucelosis","sarampi\243n"]}
+-}
+
+
+antiAge :: Animal -> Animal
+antiAge unRaton = medicamento (replicate 3 hierbaBuena ++ [alcachofa]) unRaton
